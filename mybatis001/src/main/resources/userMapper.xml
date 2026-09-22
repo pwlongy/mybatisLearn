@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.mybatis.example.BlogMapper">
+
+<!--
+    insert sql对应的标签： insert 标签
+    update sql对应的标签： update 标签
+    delete sql对应的标签： delete 标签
+    select sql对应的标签： select 标签
+
+    id 是sql语句的唯一标识。你可以重复
+  -->
+    <insert id="insertUser">
+        insert into user
+            (name, age, address, car, animal)
+        values
+            ("小明", 18, "北京故宫", "宝马", "猫")
+    </insert>
+
+<!--  使用占位符的形式添加数据   -->
+<!--
+      parameterType 大部分情况下是可以省略的，用来指定参数的类型，这个参数类型的名字如果是Map，
+      可以有多种写法 java.util.Map/ Map / map
+  -->
+    <insert id="insertUser01" parameterType="Map">
+        insert into user
+            (name, age, address, car, animal)
+        values
+            (#{name}, #{age}, #{address}, #{car}, #{animal})
+    </insert>
+    <!--
+       这个 parameterType 属性的值，目前不能随便写， 必须写全限定类名， 后期通过一些设置，才可以使用简体类名或者是小写的类名
+       parameterType 也可以省略
+       #{name} 底层睡觉哦怎么给这个占位符传值的
+           #{name} 底层会调用 user.getName() 来获取 name属性的值， 然后将获取的值传给这个占位符
+           #{name} 优先调用 user.getName() . 当这个方法不存在的时候， mybatis 回去找 car 对象的 name字段， 通过读取这个字段来获取name属性的值
+           getName 方法不存在 并且 name 字段不存在的时候，则会出现异常
+    -->
+    <insert id="insertUser02" parameterType="com.mybatis.User">
+        insert into user
+        (name, age, address, car, animal)
+        values
+        (#{name}, #{age}, #{address}, #{car}, #{animal})
+    </insert>
+
+<!--  当mybatis 中的占位符只有一个的时候， 那么 #{} 中的名字可以随便定义   -->
+    <delete id="deleteById">
+        delete from user where id = #{id}
+    </delete>
+
+    <update id="updateById" parameterType="com.mybatis.User">
+        update user set
+            name = #{name},
+            age = #{age},
+            address = #{address},
+            car = #{car},
+            animal = #{animal}
+        where
+            id = #{id}
+    </update>
+
+<!--  查询一条记录  -->
+    <select id="slectById" resultType="com.mybatis.User">
+        select
+            *
+        from
+            user
+        where
+            id = #{id};
+    </select>
+
+<!--查询所有记录数据-->
+    <select id="selectAll" resultType="com.mybatis.User">
+        select * from user
+    </select>
+
+<!--    <select id="selectBlog" resultType="Blog">-->
+<!--        select * from Blog where id = #{id}-->
+<!--    </select>-->
+</mapper>
