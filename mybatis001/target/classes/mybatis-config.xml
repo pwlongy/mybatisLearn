@@ -5,6 +5,10 @@
 <!--根标签-->
 <configuration>
 
+    <properties resource="JDBC.properties">
+        <property name="JDBC.driver" value="com.mysql.cj.jdbc.Driver"/>
+    </properties>
+
     <settings>
 <!--    开启 mybatis 自带日志    -->
         <setting name="logImpl" value="STDOUT_LOGGING"/>
@@ -15,14 +19,37 @@
         <!--  开发环境  -->
         <environment id="development">
             <!--  事务管理器： mybatis 默认使用的事务管理器是JDBC的，myBatis委托给JDBC来管理事物  -->
+            <!--
+                <transactionManager type="JDBC"/>
+                transactionManager的type有两个值可选 JDBC 、 MANAGED
+                1. JDBC: MyBatis自己管理事务，委托给 JDBC Connection, 底层原理： 事务开启conn.setAutoCommit(false)
+                处理业务， 事务提交 conn.commit(); 如果在集成环境下，例如 spring 和 mybatis 集成了， spring 使用
+                @transactional 注解来开启，提交或回滚事务，在这种模式下， JDBC 事务管理器会被忽略
+
+                2. MANAGED: mybatis 不负责管理事务，将事务管理交给其他容器来负责，比如spring、 app Server等，如果没有管理事务
+                的容器，则没有事务，没有事务的含义：只要执行一条DML语句，则提交一次
+            -->
             <transactionManager type="JDBC"/>
             <!--  数据源： 数据源类型是POOLED， 表示使用连接池来管理数据源 -->
+            <!--
+                <dataSource type="POOLED">
+                dataSource的 type 有三个值可选 POOLED、UNPOOLED、 JNDI
+                1. POOLED(使用myBatis内置的连接池)
+                2. UNPOOLED(不适用连接池)
+                3. JNDI(使用JNDI上下文提供的连接池技术)
+                    JNDI 是一套规范（java Naming Directory Interfavce）
+                    【类似JDBC： JDBC 是一套接口，JDBC是从数据库中查询数据】
+                    【JNDI也是一套接口，只不过JNDI是从一个无规则的容器中查找】
+                    tomcat 服务器实现了JNDI 规范，所有的应用服务器也都实现了JNDI规范
+                    Tomcat 服务器可以通过JNDI规范，向 Tomcat 服务器上百年顶连接池技术
+                    通过JNDI向Tomcat服务其上绑定HikarCP连接池
+            -->
             <dataSource type="POOLED">
-<!--                        -->
-                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
-                <property name="url" value="jdbc:mysql://localhost:3306/mybatis"/>
-                <property name="username" value="root"/>
-                <property name="password" value="123456"/>
+                <!--   -->
+                <property name="driver" value="${JDBC.driver}"/>
+                <property name="url" value="${JDBC.url}"/>
+                <property name="username" value="${JDBC.username}"/>
+                <property name="password" value="${JDBC.password}"/>
             </dataSource>
         </environment>
     </environments>
