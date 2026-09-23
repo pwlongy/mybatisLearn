@@ -13,6 +13,21 @@
 <!--    开启 mybatis 自带日志    -->
         <setting name="logImpl" value="STDOUT_LOGGING"/>
     </settings>
+
+<!--  起别名  -->
+    <typeAliases>
+        <!--
+            例如在 在 userMapper 文件中需要使用 com.mybatis.user.mapper.userMapper，设置别名后就不需要
+            完整的设置这个路径，只需要使用 alias 设置的值
+        -->
+<!--        <typeAlias type="com.mybatis.user.entity.UserEntity" alias="UserEntity"/>-->
+
+        <!--   将某个包下的所有实体类自动起别名，底层会自动使用实体类的简类名作为别名
+               例如 name设置为 com.mybatis.user.entity， com.mybatis.user.entity路径下的所有类名都会自动添加进去
+               并且别名会自动设置为 类名 com.mybatis.user.entity.UserEntity 下的别名就会设置为UserEntity
+             -->
+        <package name="com.mybatis.user.entity"/>
+    </typeAliases>
     
 <!--  多环境  -->
     <environments default="development">
@@ -53,10 +68,26 @@
             </dataSource>
         </environment>
     </environments>
+
+
+
     <mappers>
         <!--   这是其中一个sqlMapper.xml文件的路径     -->
         <!--   mapper 标签的 resource 属性默认从类的根路径下的资源开始找     -->
         <!--   对于maven项目来说， resource 目录就是类的根路径     -->
         <mapper resource="userMapper.xml"/>
+<!--        <mapper resource="usertityMapper.xml"/>-->
+
+        <!--
+            mapper 的 class 写法
+            1. SQL 映射文件和 mapper 接口必须放在同一目录下
+            2. SQL 映射文件的名字也必须和 mapper 接口名一致
+        -->
+<!--        <mapper class="com.mybatis.user.mapper.userMapper"></mapper>-->
+
+        <!--
+            最终解决方案: 直接设置包名
+        -->
+        <package name="com.mybatis.user.mapper"/>
     </mappers>
 </configuration>

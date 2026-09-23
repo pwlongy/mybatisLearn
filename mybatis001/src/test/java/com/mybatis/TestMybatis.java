@@ -1,12 +1,15 @@
 package com.mybatis;
 
+import com.mybatis.user.entity.Student;
+import com.mybatis.user.entity.UserEntity;
+import com.mybatis.user.mapper.studentMapper;
+import com.mybatis.user.mapper.userMapper;
 import com.utils.SqlSessionUtil;
 import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  *
@@ -103,5 +106,70 @@ public class TestMybatis {
         }catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Test
+    public void TestSlectUserEntitySqlSession() {
+        try {
+            userMapper userMapper = SqlSessionUtil.openSession().getMapper(userMapper.class);
+            List<UserEntity> userEntityList = userMapper.selectAllByTableName("user");
+            Iterator iterator = userEntityList.iterator();
+            while (iterator.hasNext()) {
+                Object next =  iterator.next();
+                System.out.println(next);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void TestSelectLikeUserEntitySqlsession() {
+        try {
+            userMapper mapper  = SqlSessionUtil.openSession().getMapper(userMapper.class);
+            List<UserEntity> userEntityList = mapper.selectLikeTabeDate("小");
+            Iterator iterator = userEntityList.iterator();
+            while (iterator.hasNext()) {
+                Object next =  iterator.next();
+                System.out.println(next);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    @Test
+    public void TestInsertUserEntitySqlSession() {
+        try {
+            SqlSession sqlSession = SqlSessionUtil.openSession();
+            userMapper map = sqlSession.getMapper(userMapper.class);
+            UserEntity userEntity = new UserEntity("longyu", 18, "江西吉安", "卡迪拉克", "小狗");
+            map.insertUserData(userEntity);
+            sqlSession.commit();
+            System.out.println(userEntity.getId());
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    public void TestInsertStudentEntitySqlSession() {
+        try {
+            SqlSession sqlSession = SqlSessionUtil.openSession();
+            studentMapper mapper = sqlSession.getMapper(studentMapper.class);
+            Student student = new Student("龙玉", 18, "女", "计算机科学以技术1702班", 100.0,"18214523695", new Date());
+            mapper.insertStudent(student);
+            sqlSession.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getNowTimeDate() {
+        Date date = new Date();
+        // 格式化时间
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String createTime = simpleDateFormat.parse(date);
+
+        return createTime;
     }
 }

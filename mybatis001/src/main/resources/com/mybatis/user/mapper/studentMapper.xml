@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mybatis.user.mapper.studentMapper">
+    <insert id="insertStudent" parameterType="student" useGeneratedKeys="true" keyProperty="id">
+        insert into student
+            (name, age, gender,className as class_name, score, phone, createTime as create_time)
+        values
+            (#{name}, #{age}, #{gender}, #{className}, #{score}, #{phone}, #{createTime} )
+    </insert>
+</mapper>
