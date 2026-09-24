@@ -10,8 +10,15 @@
     </properties>
 
     <settings>
-<!--    开启 mybatis 自带日志    -->
+        <!--    开启 mybatis 自带日志    -->
         <setting name="logImpl" value="STDOUT_LOGGING"/>
+        <!--
+            开启驼峰命名自动映射
+            要求必须数据库字段命名方式必须是name_calss格式
+            而在java中必须要以 nameClass 格式进行定义，
+            否则将会失效
+        -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
 <!--  起别名  -->

@@ -13,9 +13,9 @@ public class Student {
     private String className;
     private Double score;
     private String phone;
-    private Date createTime;
+    private String createTime;
 
-    public Student(String name, int age, String gender, String className, Double score, String phone, Date createTime) {
+    public Student(String name, int age, String gender, String className, Double score, String phone, String createTime) {
         this.gender = gender;
         this.name = name;
         this.age = age;
@@ -84,11 +84,11 @@ public class Student {
         this.phone = phone;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 

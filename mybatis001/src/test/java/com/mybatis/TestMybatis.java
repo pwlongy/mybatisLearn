@@ -9,6 +9,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.junit.jupiter.api.Test;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 /**
@@ -156,7 +158,7 @@ public class TestMybatis {
         try {
             SqlSession sqlSession = SqlSessionUtil.openSession();
             studentMapper mapper = sqlSession.getMapper(studentMapper.class);
-            Student student = new Student("龙玉", 18, "女", "计算机科学以技术1702班", 100.0,"18214523695", new Date());
+            Student student = new Student("龙玉", 18, "女", "计算机科学以技术1702班", 100.0,"18214523695", getNowTimeDate());
             mapper.insertStudent(student);
             sqlSession.commit();
         } catch (Exception e) {
@@ -164,12 +166,41 @@ public class TestMybatis {
         }
     }
 
-    public String getNowTimeDate() {
-        Date date = new Date();
-        // 格式化时间
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String createTime = simpleDateFormat.parse(date);
+    @Test
+    public void TestSelectStudentEntitySqlSession() {
+        try {
+            SqlSession sqlSession = SqlSessionUtil.openSession();
+            studentMapper mapper = sqlSession.getMapper(studentMapper.class);
+            List<Student> students = mapper.selectStudentName("张");
+            Iterator iterator = students.iterator();
+            while (iterator.hasNext()) {
+                Object next =  iterator.next();
+                System.out.println(next);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-        return createTime;
+    @Test
+    public void TestselectDynamicData() {
+        Map<String, Object> params = new HashMap<>();
+        params.put("name", "小");
+        params.put("age", 18);
+        params.put("createTime", "2026-09-03");
+        try {
+            studentMapper mapper = SqlSessionUtil.openSession().getMapper(studentMapper.class);
+            mapper.selectDynamicData(params);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getNowTimeDate() {
+        LocalDateTime now = LocalDateTime.now();
+        // 1. 自定义格式
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String result = now.format(fmt);
+        return result;
     }
 }

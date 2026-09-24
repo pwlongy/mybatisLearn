@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mybatis.user.mapper.userMapper">
+    <select id="selectAllByTableName" parameterType="string" resultType="com.mybatis.user.entity.UserEntity">
+        select * from ${tableName}
+    </select>
+
+    <select id="selectLikeTabeDate" parameterType="string" resultType="UserEntity">
+        select * from user where name like concat('%', #{fileName} ,'%')
+    </select>
+
+    <insert id="insertUserData" parameterType="UserEntity" useGeneratedKeys="true" keyProperty="id">
+        insert into user
+            (name, age, address, car, animal)
+        values
+            (#{name}, #{age}, #{address}, #{car}, #{animal})
+    </insert>
+</mapper>
